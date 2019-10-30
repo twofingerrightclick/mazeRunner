@@ -13,7 +13,20 @@ namespace Maze
                                      {'*','*','*'}};
 
 
-        public bool RoomHasBeenDiscovered { get; } = false;
+        public bool RoomHasBeenDiscovered { get; set; } = false;
+
+        private enum QuestionLocation
+        {
+            North,
+            South,
+            East,
+            West
+        }
+
+        //up too 4 questions, use enum for locations.
+        // private Questions[] = new Questions[4];
+
+        // public setDoor
 
         public Room(String wallLocations)
         {
@@ -108,16 +121,31 @@ namespace Maze
             for (int i = 0; i < roomLayout.Length; i++)
 
             {
-                sb.Append(string(roomLayout[i, 0]) + "\r\n");
+                for (int j = 0; j < roomLayout.GetLength(i); j++)
+                {
+                    sb.Append(roomLayout[i, j]);
+                }
+                sb.Append("\r\n");
             }
 
-            return sb.ToString().ReplaceAll("\\[|]|,", "");
+            return sb.ToString().Replace("\\[|]|,", "");
         }
 
         public String getRoomRowasString(int row)
         {
 
-            return ToString(this.roomLayout[row]).replaceAll("\\[|]|,", "");
+            //return ToString(roomLayout(row)).Replace("\\[|]|,", "");
+
+            StringBuilder sb = new StringBuilder();
+
+            for (int i = 0; i < roomLayout.Length; i++)
+
+            {
+                sb.Append(roomLayout[row, i]);
+
+            }
+
+            return sb.ToString().Replace("\\[|]|,", "");
 
 
 
