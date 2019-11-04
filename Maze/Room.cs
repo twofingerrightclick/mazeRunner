@@ -12,6 +12,8 @@ namespace Maze
                                      {'*',' ','*'},
                                      {'*','*','*'}};
 
+        
+
 
         public bool RoomHasBeenDiscovered { get; set; } = false;
 
@@ -145,7 +147,10 @@ namespace Maze
 
             }
 
-            return sb.ToString().Replace("\\[|]|,", "");
+            Console.WriteLine(sb.ToString());
+
+            //return sb.ToString().Replace("\\[|]|,", "");
+            return "***";
 
 
 

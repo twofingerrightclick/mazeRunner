@@ -6,8 +6,13 @@ namespace MazeTests
     public class UnitTest1
     {
         [TestMethod]
-        public void TestMethod1()
+        public void PrintMazeToConsole()
         {
+            Maze.Maze maze = new Maze.Maze(4);
+            System.Console.Write(maze);
         }
+
+        
+
     }
 }
