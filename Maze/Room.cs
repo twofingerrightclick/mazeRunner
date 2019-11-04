@@ -12,6 +12,8 @@ namespace Maze
                                      {'*',' ','*'},
                                      {'*','*','*'}};
 
+        
+
 
         public bool RoomHasBeenDiscovered { get; set; } = false;
 
@@ -118,17 +120,19 @@ namespace Maze
         {
             StringBuilder sb = new StringBuilder();
 
-            for (int i = 0; i < roomLayout.Length; i++)
+            for (int i = 0; i < roomLayout.GetLength(0); i++)
 
             {
-                for (int j = 0; j < roomLayout.GetLength(i); j++)
+               
+                for (int j = 0; j < roomLayout.GetLength(1); j++)
                 {
                     sb.Append(roomLayout[i, j]);
                 }
                 sb.Append("\r\n");
             }
 
-            return sb.ToString().Replace("\\[|]|,", "");
+            //return sb.ToString().Replace("\\[|]|,", "");
+            return "hello";
         }
 
         public String getRoomRowasString(int row)
@@ -138,14 +142,17 @@ namespace Maze
 
             StringBuilder sb = new StringBuilder();
 
-            for (int i = 0; i < roomLayout.Length; i++)
+            for (int i = 0; i < roomLayout.GetLength(0); i++)
 
             {
                 sb.Append(roomLayout[row, i]);
 
             }
 
+            //Console.WriteLine(sb.ToString());
+
             return sb.ToString().Replace("\\[|]|,", "");
+           // return "***";
 
 
 
