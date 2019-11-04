@@ -28,13 +28,13 @@ namespace Maze
         private void createMaze()
         {
 
-            MazeStructure maze = new MazeStructure(size);
-            String[,] wallLocations = maze.getWalls();
+            MazeStructure mazeStructure = new MazeStructure(size);
+            String[,] wallLocations = mazeStructure.getWalls();
 
-            for (int x = 0; x < this.roomArray.Length; x++)
+            for (int x = 0; x < size; x++)
             {
 
-                for (int y = 0; y < this.roomArray.Length; y++)
+                for (int y = 0; y < size; y++)
                 {
                     this.roomArray[x,y] = new Room(wallLocations[x,y]);
                 }
@@ -139,8 +139,9 @@ namespace Maze
                 {
                     for (int dungeonCol = 0; dungeonCol < this.size; dungeonCol++)
                     {
-                        mazeRoomStringBuilder.Append(getRoom(mazeRow, dungeonCol).getRoomRowasString(roomRow));
-                        
+                        //mazeRoomStringBuilder.Append(getRoom(mazeRow, dungeonCol).getRoomRowasString(roomRow));
+                        mazeRoomStringBuilder.Append(getRoom(mazeRow, dungeonCol));
+
                     }
                     mazeRoomStringBuilder.Append("\r\n");
                 }
