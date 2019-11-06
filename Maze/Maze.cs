@@ -11,15 +11,20 @@ namespace Maze
         private int size;
         private int[] entranceCoodinates = new int[2];
         private int[] exitCoordinates = new int[2];
+        private QuestionFactory questionFactory = new QuestionFactory();
+        
 
         private Random randomInt = new Random();
 
-        public Maze(int size)
+        public Maze(int size, params string [] questionArgs)
         {
             this.roomArray = new Room[size,size];
             this.size = size;
-            //if not all pillars set try again
-          createMaze();
+            QuestionFactory questionFactory =  new QuestionFactory();
+            List<Question> questions = questionFactory.getQuestions(questionArgs, (size*size*4));
+
+            
+            createMaze();
 
 
 
@@ -51,6 +56,18 @@ namespace Maze
 
             setExits();
             //return addEvents();
+
+
+
+        }
+
+        private void changeRoomQuestions( (int x, int y) roomCoordinates, params string [] questionArgs )
+        {
+
+
+            int numQuestionsNotAnsweredInRoom = roomArray[roomCoordinates.x, roomCoordinates.y].getRemainingQuestions();
+            
+            List<Question> newQuestions = questionFactory.getQuestions(questionArgs, numQuestionsNotAnsweredInRoom);
 
 
 

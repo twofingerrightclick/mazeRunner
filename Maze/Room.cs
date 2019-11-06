@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Text;
 
 namespace Maze
@@ -68,9 +69,14 @@ namespace Maze
 
         }
 
-        public void addRoomEvent()
+        internal int getRemainingQuestions()
         {
-            
+            throw new NotImplementedException();
+        }
+
+        public void addQuestions(List<Question> questions)
+        {
+            //check adjacent rooms and add the same questions. 
         }
 
         //public bool doRoomEvents(Hero theHero)
