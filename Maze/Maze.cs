@@ -19,7 +19,7 @@ namespace Maze
             this.roomArray = new Room[size,size];
             this.size = size;
             //if not all pillars set try again
-           // while (!createMaze()) ;
+          createMaze();
 
 
 
@@ -102,7 +102,7 @@ namespace Maze
 
             
             //RoomEvent theEntrance = new Entrance();
-            //roomArray[exitX,exitY].addRoomEvent(theExit);
+            roomArray[exitX,exitY].addRoomEvent(theExit);
             //roomArray[entranceCoodinates[0],entranceCoodinates[1]].addRoomEvent(theEntrance);
 
         }
@@ -137,10 +137,10 @@ namespace Maze
 
                 for (int roomRow = 0; roomRow < 3; roomRow++)
                 {
-                    for (int dungeonCol = 0; dungeonCol < this.size; dungeonCol++)
+                    for (int mazeCol = 0; mazeCol < this.size; mazeCol++)
                     {
-                        //mazeRoomStringBuilder.Append(getRoom(mazeRow, dungeonCol).getRoomRowasString(roomRow));
-                        mazeRoomStringBuilder.Append(getRoom(mazeRow, dungeonCol));
+                        mazeRoomStringBuilder.Append(getRoom(mazeRow, mazeCol).getRoomRowasString(roomRow));
+                        //mazeRoomStringBuilder.Append(getRoom(mazeRow, dungeonCol));
 
                     }
                     mazeRoomStringBuilder.Append("\r\n");

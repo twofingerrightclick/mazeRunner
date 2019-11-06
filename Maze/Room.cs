@@ -9,7 +9,7 @@ namespace Maze
         //private ArrayList<RoomEvent> roomEvent = new ArrayList<>();
         //room events now can be doors
         private char[,] roomLayout ={{'*','*','*'},
-                                     {'*',' ','*'},
+                                     {'*','r','*'},
                                      {'*','*','*'}};
 
         
@@ -68,11 +68,10 @@ namespace Maze
 
         }
 
-        //public void addRoomEvent(RoomEvent r)
-        //{
-        //    this.roomEvent.add(r);
-        //    setRoomEventIdentifier();
-        //}
+        public void addRoomEvent()
+        {
+            
+        }
 
         //public bool doRoomEvents(Hero theHero)
         //{
@@ -131,8 +130,8 @@ namespace Maze
                 sb.Append("\r\n");
             }
 
-            //return sb.ToString().Replace("\\[|]|,", "");
-            return "hello";
+            return sb.ToString().Replace("\\[|]|,", "");
+            //return "hello";
         }
 
         public String getRoomRowasString(int row)
