@@ -12,7 +12,9 @@ namespace Maze
         private int[] entranceCoodinates = new int[2];
         private int[] exitCoordinates = new int[2];
         private QuestionFactory questionFactory = new QuestionFactory();
-        
+        private List<Question> questions;
+
+
 
         private Random randomInt = new Random();
 
@@ -20,10 +22,9 @@ namespace Maze
         {
             this.roomArray = new Room[size,size];
             this.size = size;
-            QuestionFactory questionFactory =  new QuestionFactory();
-            List<Question> questions = questionFactory.getQuestions(questionArgs, (size*size*4));
-
             
+            questions = questionFactory.getQuestions(questionArgs, (size * size * 4));
+
             createMaze();
 
 
@@ -55,6 +56,7 @@ namespace Maze
         {
 
             setExits();
+            addQuestions();
             //return addEvents();
 
 
@@ -63,35 +65,46 @@ namespace Maze
 
         private void changeRoomQuestions( (int x, int y) roomCoordinates, params string [] questionArgs )
         {
-
-
-            int numQuestionsNotAnsweredInRoom = roomArray[roomCoordinates.x, roomCoordinates.y].getRemainingQuestions();
             
-            List<Question> newQuestions = questionFactory.getQuestions(questionArgs, numQuestionsNotAnsweredInRoom);
+            
+
+           int numQuestionsNotAnsweredInRoom = roomArray[roomCoordinates.x, roomCoordinates.y].getRemainingQuestions();
+            
+            questionFactory.getQuestions(questionArgs, numQuestionsNotAnsweredInRoom);
+
+            //the room has questions stored by index. so then add the new questions at the old questions spots, and check adjacent questions. 
 
 
 
         }
 
 
+        public void QuestionAnsweredCorrectly()
+        {
+            //remove question from 
+        }
 
         private bool addQuestions()
         {
-            
 
-           
+            foreach (Room room in roomArray)
+            {
+                //get doors
+                //assign question by index to the question array.
+            }
+
             //for (Room row[] : roomArray)
             //{
 
             //    for (Room room : row)
             //    {
             //        //only add events where there aren't exits
-                    
+
             //    }
 
             //}
-            
-           
+
+
             return true;
         }
 

@@ -7,7 +7,18 @@ namespace Maze
     {
         internal List<Question> getQuestions(string[] questionArgs, int numberOfQuestionsToReturn)
         {
-            throw new NotImplementedException();
+            // question args are for type of question. perhaps make enum. like sports+difficult. 
+            // what sort of questions to inlude in the returned list.
+            
+            //mock code:
+            var questions = new List<Question>();
+            for (int i = 0; i < numberOfQuestionsToReturn; i++) {
+                questions.Add(new Question());
+            }
+
+            return questions;
+            //end mock code
+           
         }
     }
 }

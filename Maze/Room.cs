@@ -13,8 +13,8 @@ namespace Maze
                                      {'*','r','*'},
                                      {'*','*','*'}};
 
-        
 
+        public List<(int location, int questionIndex)> questions = new List<(int location, int questionIndex)>();
 
         public bool RoomHasBeenDiscovered { get; set; } = false;
 
@@ -39,10 +39,18 @@ namespace Maze
             if (!wallLocations.Contains("E")) { this.roomLayout[1, 2] = '|'; }
             if (!wallLocations.Contains("W")) { this.roomLayout[1, 0] = '|'; }
 
+
+
         }
 
 
         public Room() { }
+
+        public void RemoveQuestionMakeDoorOpen() {
+
+            
+            //remove question
+        }
 
         //private void setRoomEventIdentifier()
         //{
@@ -56,18 +64,7 @@ namespace Maze
 
 
         //}
-        public void setRoomEventIdentifier(char identifier)
-        {
-
-            /*if (this.roomEvent.size()>=2){
-            this.roomLayout[1, 1]=roomEvent.get(0).getIdentifier();
-            }*/
-
-            this.roomLayout[1, 1] = identifier;
-
-
-
-        }
+       
 
         internal int getRemainingQuestions()
         {
@@ -97,10 +94,7 @@ namespace Maze
         //    return true;
         //}
 
-        //public ArrayList<RoomEvent> getRoomEvent()
-        //{
-        //    return roomEvent;
-        //}
+       
 
         public char[,] getRoomLayout()
         {
