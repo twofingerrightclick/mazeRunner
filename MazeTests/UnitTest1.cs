@@ -18,6 +18,18 @@ namespace MazeTests
         }
 
 
+        [TestMethod]
+        public void PrintTestMaze()
+        {
+            int n = 2;
+            MazeStructure maze = new MazeStructure(n);
+            maze.testDraw();
+
+
+        }
+    
+
+
 
     }
 }

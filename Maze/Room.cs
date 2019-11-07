@@ -43,12 +43,21 @@ namespace Maze
 
         }
 
+        internal void addQuestions(bool v1, bool v2, bool v3, bool v4)
+        {
+            throw new NotImplementedException();
+        }
 
         public Room() { }
 
-        public void RemoveQuestionMakeDoorOpen() {
+        public void RemoveQuestionMakeDoorOpen(int questionIndexToRemove) {
 
-            
+            foreach((int location, int questionIndex) question in questions)
+            {
+                if (question.questionIndex == questionIndexToRemove) {
+                    questions.Remove(question);
+                }
+            }
             //remove question
         }
 

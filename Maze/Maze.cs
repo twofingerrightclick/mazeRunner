@@ -12,7 +12,7 @@ namespace Maze
         private int[] entranceCoodinates = new int[2];
         private int[] exitCoordinates = new int[2];
         private QuestionFactory questionFactory = new QuestionFactory();
-        private List<Question> questions;
+        private Queue<Question> questions;
 
 
 
@@ -79,9 +79,9 @@ namespace Maze
         }
 
 
-        public void QuestionAnsweredCorrectly()
+        public void QuestionAnsweredCorrectly((int x, int y) roomIndex, int questionIndex)
         {
-            //remove question from 
+            roomArray[roomIndex.x, roomIndex.y].RemoveQuestionMakeDoorOpen(questionIndex);
         }
 
         private bool addQuestions()
@@ -132,7 +132,7 @@ namespace Maze
 
             
             //RoomEvent theEntrance = new Entrance();
-            roomArray[exitX,exitY].addRoomEvent(theExit);
+            //roomArray[exitX,exitY].addRoomEvent(theExit);
             //roomArray[entranceCoodinates[0],entranceCoodinates[1]].addRoomEvent(theEntrance);
 
         }
