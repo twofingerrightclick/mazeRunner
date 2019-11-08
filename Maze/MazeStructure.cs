@@ -46,19 +46,19 @@ namespace Maze
         //walls, questions, location.
 
 
-        public MazeStructure(int n, params string[] questionArgs)
+        public MazeStructure(int size, params string[] questionArgs)
         {
-            if (n < 3)
+            if (size < 3)
             {
-                throw new ArgumentException("size must be more than 2", nameof(n));
+                throw new ArgumentException("size must be more than 2", nameof(size));
             }
 
-            questions = questionFactory.getQuestions(questionArgs, (n * n * 4));
-            this.size = n;
+            questions = questionFactory.getQuestions(questionArgs, (size * size * 4));
+            this.size = size;
             /*StdDraw.setXscale(0, n+2);
             StdDraw.setYscale(0, n+2);*/
 
-            testMaze = new string[n + 2, n + 2];
+            testMaze = new string[size + 2, size + 2];
 
             Initialize();
             generate();
