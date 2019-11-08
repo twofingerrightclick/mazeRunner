@@ -44,13 +44,6 @@ namespace MazeComponents
 
             this.Size = size;
 
-            createMaze(questionArgs);
-
-        }
-
-        private void createMaze(params string[] questionArgs)
-        {
-
             MazeStructure mazeStructure = new MazeStructure(Size, questionArgs);
             MazeQuestions = mazeStructure._QuestionsList;
 
@@ -60,9 +53,9 @@ namespace MazeComponents
 
             setExits();
 
-
-
         }
+
+        
 
         private void CopyMazeStructure(MazeStructure mazeStructure)
         {
