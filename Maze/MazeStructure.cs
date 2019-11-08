@@ -10,7 +10,7 @@ namespace Maze
 
     public class MazeStructure
     {
-        private int size;                 // dimension of maze
+        public int size;                 // dimension of maze
 
         //---------------- Algorithm variables -------------
         private bool[,] _NorthWall;     // is there a wall to north of cell i, j
@@ -461,7 +461,7 @@ namespace Maze
 
         }
 
-        private bool ValidInput(int index)
+        public bool ValidInput(int index)
         {
             return index >= 0 && index < size;
         }
