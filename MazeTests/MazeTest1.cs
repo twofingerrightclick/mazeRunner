@@ -24,9 +24,9 @@ namespace MazeTests
         }
 
         [TestMethod]
-        public void Questions_Are_The_Same_On_Either_Side_Of_Door()
+        public void North_South_Questions_Are_The_Same_On_Either_Side_Of_Door()
         {
-            int n = 3;
+            int n = 4;
             MazeStructure maze = new MazeStructure(n);
             //maze.testDraw();
 
@@ -36,11 +36,11 @@ namespace MazeTests
             {
                 for (int j = 0; j < maze.size; j++)
                 {
-                    if (maze.ValidInput(i + 1))
+                    if (maze.ValidInput(i - 1))
                     {
-                        if (!maze.NorthWall[i, j] && !maze.SouthWall[i + 1, j])
+                        if (!maze.NorthWall[i, j] )
                         {
-                            Console.WriteLine($"({i},{j}) north question matches ({i + 1},{j})");
+                            Console.WriteLine($"({i},{j}) north question matches ({i - 1},{j})");
                             Assert.IsTrue(maze.NorthQuestion[i, j].Equals(maze.SouthQuestion[i + 1, j]));
                         }
                     }
