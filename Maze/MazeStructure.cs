@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Maze
+namespace MazeComponents
 {
 
     public class MazeStructure
@@ -26,17 +26,19 @@ namespace Maze
         public bool[,] SouthWall { get; private set; }
         public bool[,] WestWall { get; private set; }
 
-        public Question[,] NorthQuestion { get; private set; }    // is there a Question north of cell i, j 
-        public Question[,] EastQuestion { get; private set; }
-        public Question[,] SouthQuestion { get; private set; }
-        public Question[,] WestQuestion { get; private set; }
+        public int[,] NorthQuestion { get; private set; }    // is there a Question north of cell i, j 
+        public int[,] EastQuestion { get; private set; }
+        public int[,] SouthQuestion { get; private set; }
+        public int[,] WestQuestion { get; private set; }
+
+        public List<Question> _QuestionsList { get; } = new List<Question>();
 
 
 
         private int[] entranceCoodinates = new int[2];
         private int[] exitCoordinates = new int[2];
         private QuestionFactory questionFactory = new QuestionFactory();
-        private Queue<Question> questions;
+        private Queue<Question> _QuestionQueue;
 
 
 
@@ -53,7 +55,7 @@ namespace Maze
                 throw new ArgumentException("size must be more than 2", nameof(size));
             }
 
-            questions = questionFactory.getQuestions(questionArgs, (size * size * 4));
+            _QuestionQueue = questionFactory.getQuestions(questionArgs, (size * size * 4));
             this.size = size;
             /*StdDraw.setXscale(0, n+2);
             StdDraw.setYscale(0, n+2);*/
@@ -378,10 +380,10 @@ namespace Maze
             SouthWall = new bool[size, size];
             WestWall = new bool[size, size];
 
-            NorthQuestion = new Question[size, size];
-            EastQuestion = new Question[size, size];
-            SouthQuestion = new Question[size, size];
-            WestQuestion = new Question[size, size];
+            InitializeQuestionLocationArraysWithDefaultQuestionIndex(size);
+
+            int noQuestionPlacedDefault = -1;
+
 
             for (int i = 0; i < size; i++)
             {
@@ -392,7 +394,7 @@ namespace Maze
                     else
                     {
 
-                        if (ValidIndex(i - 1) && SouthQuestion[i - 1, j] != null)
+                        if (ValidIndex(i - 1) && SouthQuestion[i - 1, j] != noQuestionPlacedDefault)
                         {
 
                             NorthQuestion[i, j] = SouthQuestion[i - 1, j];
@@ -400,7 +402,9 @@ namespace Maze
                         }
                         else
                         {
-                            NorthQuestion[i, j] = questions.Dequeue();
+                            _QuestionsList.Add(_QuestionQueue.Dequeue());
+                            
+                            NorthQuestion[i, j] = _QuestionsList.Count-1;
                         }
 
                     }
@@ -409,7 +413,7 @@ namespace Maze
                     else
                     {
 
-                        if (ValidIndex(i + 1) && NorthQuestion[i + 1, j] != null)
+                        if (ValidIndex(i + 1) && NorthQuestion[i + 1, j] != noQuestionPlacedDefault)
                         {
 
                             SouthQuestion[i, j] = NorthQuestion[i + 1, j];
@@ -417,7 +421,12 @@ namespace Maze
                         }
                         else
                         {
-                            SouthQuestion[i, j] = questions.Dequeue();
+
+                            _QuestionsList.Add(_QuestionQueue.Dequeue());
+
+                         
+
+                            SouthQuestion[i, j] = _QuestionsList.Count - 1; ;
                         }
 
                     }
@@ -426,15 +435,18 @@ namespace Maze
                     else
                     {
 
-                        if (ValidIndex(j + 1) && WestQuestion[i, j+1] != null)
+                        if (ValidIndex(j + 1) && WestQuestion[i, j + 1] != noQuestionPlacedDefault)
                         {
 
-                            EastQuestion[i, j] = WestQuestion[i, j+1];
+                            EastQuestion[i, j] = WestQuestion[i, j + 1];
 
                         }
                         else
                         {
-                            EastQuestion[i, j] = questions.Dequeue();
+                            _QuestionsList.Add(_QuestionQueue.Dequeue());
+                           
+
+                            EastQuestion[i, j] = _QuestionsList.Count - 1; 
                         }
 
                     }
@@ -443,7 +455,7 @@ namespace Maze
                     else
                     {
 
-                        if (ValidIndex(j - 1) && EastQuestion[i, j - 1] != null)
+                        if (ValidIndex(j - 1) && EastQuestion[i, j - 1] != noQuestionPlacedDefault)
                         {
 
                             WestQuestion[i, j] = EastQuestion[i, j - 1];
@@ -451,7 +463,9 @@ namespace Maze
                         }
                         else
                         {
-                            WestQuestion[i, j] = questions.Dequeue();
+                            _QuestionsList.Add(_QuestionQueue.Dequeue());
+                           
+                            WestQuestion[i, j] = _QuestionsList.Count - 1;
                         }
 
                     }
@@ -459,6 +473,32 @@ namespace Maze
                 }
 
             }
+
+        }
+
+        private void InitializeQuestionLocationArraysWithDefaultQuestionIndex(int size)
+        {
+
+
+            NorthQuestion = new int[size, size];
+            EastQuestion = new int[size, size];
+            SouthQuestion = new int[size, size];
+            WestQuestion = new int[size, size];
+
+            for (int i = 0; i < size; i++)
+            {
+                for (int j = 0; j < size; j++)
+                {
+
+                    NorthQuestion[i, j] = -1;
+                    EastQuestion[i, j] = -1;
+                    SouthQuestion[i, j] = -1;
+                    WestQuestion[i, j] = -1;
+                }
+
+            }
+
+
 
         }
 

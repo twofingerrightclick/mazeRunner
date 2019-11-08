@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Maze
+namespace MazeComponents
 {
     public class Maze
     {
@@ -13,10 +13,10 @@ namespace Maze
         public bool[,] SouthWall { get; private set; }
         public bool[,] WestWall { get; private set; }
 
-        public Question[,] NorthQuestion { get; private set; }    // is there a Question north of cell i, j 
-        public Question[,] EastQuestion { get; private set; }
-        public Question[,] SouthQuestion { get; private set; }
-        public Question[,] WestQuestion { get; private set; }
+        public int[,] NorthQuestion { get; private set; }    // contains the index that coresponds to the question in the Question List (MazeQuestions)
+        public int[,] EastQuestion { get; private set; }
+        public int[,] SouthQuestion { get; private set; }
+        public int[,] WestQuestion { get; private set; }
 
 
         public bool[,] RoomDiscovered { get; private set; }
@@ -27,6 +27,8 @@ namespace Maze
         private (int x, int y) _ExitCoordinates;
 
         private QuestionFactory _QuestionFactory = new QuestionFactory();
+
+        public List<Question> MazeQuestions { get; private set; } = new List<Question>();
 
 
 
@@ -50,6 +52,7 @@ namespace Maze
         {
 
             MazeStructure mazeStructure = new MazeStructure(Size, questionArgs);
+            MazeQuestions = mazeStructure._QuestionsList;
 
             CopyMazeStructure(mazeStructure);
 
@@ -77,21 +80,19 @@ namespace Maze
 
         }
 
-        private void ChangeQuestion(Question question, params string[] questionArgs)
+        public void ChangeQuestion( int QuestionIndex, params string[] questionArgs)
         {
-            question = _QuestionFactory.getQuestions(questionArgs, 1).Dequeue();
+            MazeQuestions[QuestionIndex] = _QuestionFactory.getQuestions(questionArgs, 1).Dequeue();
         }
 
 
 
-        public void ChangeAllQuestions((int x, int y) location, params string[] questionParams)
+        public void ChangeAllQuestionsInMaze((int x, int y) location, params string[] questionParams)
         {
             Queue<Question> newQuestions = _QuestionFactory.getQuestions(questionParams, Size * Size * 4);
+            MazeQuestions = new List<Question>();
 
-            NorthQuestion = new Question[Size, Size];
-            EastQuestion = new Question[Size, Size];
-            SouthQuestion = new Question[Size, Size];
-            WestQuestion = new Question[Size, Size];
+            InitializeQuestionLocationArraysWithDefaultQuestionIndex();
 
 
 
@@ -99,7 +100,7 @@ namespace Maze
 
             {
 
-                if (ValidIndex(location.x - 1) && SouthQuestion[location.x - 1, location.y] != null)
+                if (ValidIndex(location.x - 1) && SouthQuestion[location.x - 1, location.y] != -1)
                 {
 
                     NorthQuestion[location.x, location.y] = SouthQuestion[location.x - 1, location.y];
@@ -107,7 +108,8 @@ namespace Maze
                 }
                 else
                 {
-                    NorthQuestion[location.x, location.y] = newQuestions.Dequeue();
+                    MazeQuestions.Add(newQuestions.Dequeue());
+                    NorthQuestion[location.x, location.y] = MazeQuestions.Count-1;
                 }
 
             }
@@ -116,7 +118,7 @@ namespace Maze
 
             {
 
-                if (ValidIndex(location.x + 1) && NorthQuestion[location.x + 1, location.y] != null)
+                if (ValidIndex(location.x + 1) && NorthQuestion[location.x + 1, location.y] != -1)
                 {
 
                     SouthQuestion[location.x, location.y] = NorthQuestion[location.x + 1, location.y];
@@ -124,7 +126,8 @@ namespace Maze
                 }
                 else
                 {
-                    SouthQuestion[location.x, location.y] = newQuestions.Dequeue();
+                    MazeQuestions.Add(newQuestions.Dequeue());
+                    SouthQuestion[location.x, location.y] = MazeQuestions.Count-1;
                 }
 
             }
@@ -133,7 +136,7 @@ namespace Maze
 
             {
 
-                if (ValidIndex(location.y + 1) && WestQuestion[location.x, location.y + 1] != null)
+                if (ValidIndex(location.y + 1) && WestQuestion[location.x, location.y + 1] != -1)
                 {
 
                     EastQuestion[location.x, location.y] = WestQuestion[location.x, location.y + 1];
@@ -141,7 +144,8 @@ namespace Maze
                 }
                 else
                 {
-                    EastQuestion[location.x, location.y] = newQuestions.Dequeue();
+                    MazeQuestions.Add(newQuestions.Dequeue());
+                    EastQuestion[location.x, location.y] = MazeQuestions.Count-1;
                 }
 
             }
@@ -150,7 +154,7 @@ namespace Maze
 
             {
 
-                if (ValidIndex(location.y - 1) && EastQuestion[location.x, location.y - 1] != null)
+                if (ValidIndex(location.y - 1) && EastQuestion[location.x, location.y - 1] != -1)
                 {
 
                     WestQuestion[location.x, location.y] = EastQuestion[location.x, location.y - 1];
@@ -158,10 +162,38 @@ namespace Maze
                 }
                 else
                 {
-                    WestQuestion[location.x, location.y] = newQuestions.Dequeue();
+
+                    MazeQuestions.Add(newQuestions.Dequeue());
+                    WestQuestion[location.x, location.y] = MazeQuestions.Count-1;
                 }
 
             }
+        }
+
+        private void InitializeQuestionLocationArraysWithDefaultQuestionIndex()
+        {
+
+
+            NorthQuestion = new int[Size, Size];
+            EastQuestion = new int[Size, Size];
+            SouthQuestion = new int[Size, Size];
+            WestQuestion = new int[Size, Size];
+
+            for (int i = 0; i < Size; i++)
+            {
+                for (int j = 0; j < Size; j++)
+                {
+
+                    NorthQuestion[i, j] = -1;
+                    EastQuestion[i, j] = -1;
+                    SouthQuestion[i, j] = -1;
+                    WestQuestion[i, j] = -1;
+                }
+
+            }
+
+
+
         }
 
         public void QuestionAnsweredCorrectly(Question question)
@@ -211,17 +243,17 @@ namespace Maze
         }
 
 
-
-        private void ChangeAllQuestionAtLocation((int x, int y) location)
+        //all locked questions in that room will be changed
+        public void ChangeAllQuestionAtLocation((int x, int y) location)
         {
 
-            if (NorthQuestion[location.x, location.y] != null && NorthQuestion[location.x, location.y].Locked()) { ChangeQuestion(NorthQuestion[location.x, location.y]); }
+            if (NorthQuestion[location.x, location.y] != -1 && MazeQuestions[ NorthQuestion[location.x, location.y]].Locked()) { ChangeQuestion(NorthQuestion[location.x, location.y]); }
 
-            if (SouthQuestion[location.x, location.y] != null && SouthQuestion[location.x, location.y].Locked()) { ChangeQuestion(SouthQuestion[location.x, location.y]); }
+            if (SouthQuestion[location.x, location.y] != -1 && MazeQuestions[ SouthQuestion[location.x, location.y]].Locked()) { ChangeQuestion(SouthQuestion[location.x, location.y]); }
 
-            if (WestQuestion[location.x, location.y] != null && WestQuestion[location.x, location.y].Locked()) { ChangeQuestion(WestQuestion[location.x, location.y]); }
+            if (WestQuestion[location.x, location.y] != -1 && MazeQuestions[ WestQuestion[location.x, location.y]].Locked()) { ChangeQuestion( WestQuestion[location.x, location.y]); }
 
-            if (EastQuestion[location.x, location.y] != null && EastQuestion[location.x, location.y].Locked()) { ChangeQuestion(EastQuestion[location.x, location.y]); }
+            if (EastQuestion[location.x, location.y] != -1 && MazeQuestions[ EastQuestion[location.x, location.y]].Locked()) { ChangeQuestion( EastQuestion[location.x, location.y]); }
 
         }
 
@@ -230,7 +262,10 @@ namespace Maze
             return index >= 0 && index < Size;
         }
 
+        public Question GetQuestion(int location) {
 
+            return MazeQuestions[location];
+        }
 
 
 

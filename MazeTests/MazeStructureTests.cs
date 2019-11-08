@@ -1,11 +1,11 @@
-using Maze;
+using MazeComponents;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 
 namespace MazeTests
 {
     [TestClass]
-    public class MazeTest1
+    public class MazeStructureTests
     {
 
 
@@ -28,9 +28,9 @@ namespace MazeTests
         {
             int n = 3;
             MazeStructure maze = new MazeStructure(n);
-            //maze.testDraw();
-
             maze.testDraw();
+
+            //maze.testDraw();
 
             for (int i = 1; i < maze.size; i++)
             {
@@ -40,8 +40,8 @@ namespace MazeTests
                     {
                         if (!maze.NorthWall[i, j])
                         {
-                            Console.WriteLine($"({i},{j}) north question {maze.NorthQuestion[i, j].number} matches south question {maze.SouthQuestion[i - 1, j].number} of ({i - 1},{j})");
-                            Assert.IsTrue(ReferenceEquals(maze.NorthQuestion[i, j], maze.SouthQuestion[i - 1, j]));
+                            Console.WriteLine($"({i},{j}) north question {maze._QuestionsList[maze.NorthQuestion[i, j]].number} matches south question {maze._QuestionsList[maze.SouthQuestion[i - 1, j]].number} of ({i - 1},{j})");
+                            Assert.IsTrue(ReferenceEquals(maze._QuestionsList[maze.NorthQuestion[i, j]], maze._QuestionsList[maze.SouthQuestion[i - 1, j]]));
                            
                         }
                     }
@@ -76,8 +76,8 @@ namespace MazeTests
                     {
                         if (!maze.EastWall[i, j])
                         {
-                            Console.WriteLine($"({i},{j}) east question {maze.EastQuestion[i, j].number} matches west question {maze.WestQuestion[i, j + 1].number} of ({i},{j + 1})");
-                            Assert.IsTrue(ReferenceEquals(maze.EastQuestion[i, j], maze.WestQuestion[i, j + 1]));
+                            Console.WriteLine($"({i},{j}) east question {maze._QuestionsList[maze.EastQuestion[i, j]].number} matches west question {maze._QuestionsList[maze.WestQuestion[i, j + 1]].number} of ({i},{j + 1})");
+                            Assert.IsTrue(ReferenceEquals(maze._QuestionsList[maze.EastQuestion[i, j]], maze._QuestionsList[maze.WestQuestion[i, j + 1]]));
                            
                         }
                     }
