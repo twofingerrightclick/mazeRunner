@@ -244,7 +244,7 @@ namespace MazeComponents
 
 
         //all locked questions in that room will be changed
-        private void ChangeAllQuestionAtLocation((int x, int y) location)
+        public void ChangeAllQuestionAtLocation((int x, int y) location)
         {
 
             if (NorthQuestion[location.x, location.y] != -1 && MazeQuestions[ NorthQuestion[location.x, location.y]].Locked()) { ChangeQuestion(NorthQuestion[location.x, location.y]); }

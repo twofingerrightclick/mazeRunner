@@ -85,7 +85,36 @@ namespace MazeTests
 
         }
 
+        [TestMethod]
+        public void Change_All_Questions_In_A_Room_Changes_Adjacent_Rooms()
+        {
+            Maze maze = new Maze(3);
+            (int x, int y) location1 = (0, 0);
+            (int x, int y) location2 = (0, 1);
 
+
+            maze.ChangeAllQuestionAtLocation(location1);
+            maze.ChangeAllQuestionAtLocation(location2);
+
+
+            for (int i = 1; i < maze.Size; i++)
+            {
+                for (int j = 0; j < maze.Size; j++)
+                {
+                    if (maze.ValidIndex(i - 1))
+                    {
+                        if (!maze.NorthWall[i, j])
+                        {
+                            Console.WriteLine($"({i},{j}) north question {maze.GetQuestion(maze.NorthQuestion[i, j]).number} matches south question {maze.MazeQuestions[maze.SouthQuestion[i - 1, j]].number} of ({i - 1},{j})");
+                            Assert.IsTrue(ReferenceEquals(maze.GetQuestion(maze.NorthQuestion[i, j]), maze.GetQuestion(maze.SouthQuestion[i - 1, j])));
+
+                        }
+                    }
+                }
+            }
+
+
+        }
 
 
 
