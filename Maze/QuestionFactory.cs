@@ -13,7 +13,7 @@ namespace Maze
             //mock code:
             var questions = new Queue<Question>();
             for (int i = 0; i < numberOfQuestionsToReturn; i++) {
-                questions.Enqueue(new Question());
+                questions.Enqueue(new Question(i));
             }
 
             return questions;

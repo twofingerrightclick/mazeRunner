@@ -387,14 +387,15 @@ namespace Maze
             {
                 for (int j = 0; j < size; j++)
                 {
+
                     if (wallLocationsRCformat[i, j].Contains("N")) { NorthWall[i, j] = true; }
                     else
                     {
 
-                        if (ValidInput(i + 1) && SouthQuestion[i + 1, j] != null)
+                        if (ValidIndex(i - 1) && SouthQuestion[i - 1, j] != null)
                         {
 
-                            NorthQuestion[i, j] = SouthQuestion[i + 1, j];
+                            NorthQuestion[i, j] = SouthQuestion[i - 1, j];
 
                         }
                         else
@@ -408,15 +409,15 @@ namespace Maze
                     else
                     {
 
-                        if (ValidInput(i - 1) && NorthQuestion[i - 1, j] != null)
+                        if (ValidIndex(i + 1) && NorthQuestion[i + 1, j] != null)
                         {
 
-                            SouthQuestion[i, j] = NorthQuestion[i - 1, j];
+                            SouthQuestion[i, j] = NorthQuestion[i + 1, j];
 
                         }
                         else
                         {
-                            NorthQuestion[i, j] = questions.Dequeue();
+                            SouthQuestion[i, j] = questions.Dequeue();
                         }
 
                     }
@@ -425,7 +426,7 @@ namespace Maze
                     else
                     {
 
-                        if (ValidInput(j + 1) && WestQuestion[i, j+1] != null)
+                        if (ValidIndex(j + 1) && WestQuestion[i, j+1] != null)
                         {
 
                             EastQuestion[i, j] = WestQuestion[i, j+1];
@@ -442,7 +443,7 @@ namespace Maze
                     else
                     {
 
-                        if (ValidInput(j - 1) && EastQuestion[i, j - 1] != null)
+                        if (ValidIndex(j - 1) && EastQuestion[i, j - 1] != null)
                         {
 
                             WestQuestion[i, j] = EastQuestion[i, j - 1];
@@ -461,7 +462,7 @@ namespace Maze
 
         }
 
-        public bool ValidInput(int index)
+        public bool ValidIndex(int index)
         {
             return index >= 0 && index < size;
         }
