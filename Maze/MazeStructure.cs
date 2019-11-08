@@ -12,14 +12,14 @@ namespace Maze
     {
         private int size;                 // dimension of maze
 
-//---------------- Algorithm variables -------------
+        //---------------- Algorithm variables -------------
         private bool[,] _NorthWall;     // is there a wall to north of cell i, j
         private bool[,] _EastWall;
         private bool[,] _SouthWall;
         private bool[,] _WestWall;
 
         private bool[,] visited;
-//------------------end Algorithm variables----------------------
+        //------------------end Algorithm variables----------------------
 
         public bool[,] NorthWall { get; private set; }    // is there a wall to north of cell i, j
         public bool[,] EastWall { get; private set; }
@@ -38,7 +38,7 @@ namespace Maze
         private QuestionFactory questionFactory = new QuestionFactory();
         private Queue<Question> questions;
 
-        
+
 
         public string[,] testMaze;
 
@@ -57,19 +57,19 @@ namespace Maze
             this.size = n;
             /*StdDraw.setXscale(0, n+2);
             StdDraw.setYscale(0, n+2);*/
-            
+
             testMaze = new string[n + 2, n + 2];
 
             Initialize();
             generate();
             getWalls();
-           
+
             setExits();
 
         }
 
-       
-        
+
+
 
         private void Initialize()
         {
@@ -86,7 +86,7 @@ namespace Maze
                 visited[size + 1, y] = true;
             }
 
-            
+
 
             // initialze all walls as present
             _NorthWall = new bool[size + 2, size + 2];
@@ -152,7 +152,7 @@ namespace Maze
                     }
                 }
             }
-           
+
         }
 
         // generate the maze starting from lower left
@@ -307,7 +307,7 @@ namespace Maze
                     }
                     else
                     {
-                       // testMaze[x, y + 1] = "?";
+                        // testMaze[x, y + 1] = "?";
                         Console.Write("east ?, ");
                     }
 
@@ -321,7 +321,7 @@ namespace Maze
         }
 
 
-       
+
 
         // a test client
         public static void Main(string[] args)
@@ -385,24 +385,85 @@ namespace Maze
 
             for (int i = 0; i < size; i++)
             {
-                for (int j = 0; j <size; j++)
+                for (int j = 0; j < size; j++)
                 {
-                    if (wallLocationsRCformat[i,j].Contains("N")) { NorthWall[i, j] = true; }
-                    else { NorthQuestion[i, j] = questions.Dequeue(); }
+                    if (wallLocationsRCformat[i, j].Contains("N")) { NorthWall[i, j] = true; }
+                    else
+                    {
+
+                        if (ValidInput(i + 1) && SouthQuestion[i + 1, j] != null)
+                        {
+
+                            NorthQuestion[i, j] = SouthQuestion[i + 1, j];
+
+                        }
+                        else
+                        {
+                            NorthQuestion[i, j] = questions.Dequeue();
+                        }
+
+                    }
 
                     if (wallLocationsRCformat[i, j].Contains("S")) { SouthWall[i, j] = true; }
-                    else { SouthQuestion[i, j] = questions.Dequeue(); }
+                    else
+                    {
+
+                        if (ValidInput(i - 1) && NorthQuestion[i - 1, j] != null)
+                        {
+
+                            SouthQuestion[i, j] = NorthQuestion[i - 1, j];
+
+                        }
+                        else
+                        {
+                            NorthQuestion[i, j] = questions.Dequeue();
+                        }
+
+                    }
 
                     if (wallLocationsRCformat[i, j].Contains("E")) { EastWall[i, j] = true; }
-                    else { EastQuestion[i, j] = questions.Dequeue(); }
+                    else
+                    {
+
+                        if (ValidInput(j + 1) && WestQuestion[i, j+1] != null)
+                        {
+
+                            EastQuestion[i, j] = WestQuestion[i, j+1];
+
+                        }
+                        else
+                        {
+                            EastQuestion[i, j] = questions.Dequeue();
+                        }
+
+                    }
 
                     if (wallLocationsRCformat[i, j].Contains("W")) { WestWall[i, j] = true; }
-                    else { WestQuestion[i, j] = questions.Dequeue(); }
+                    else
+                    {
+
+                        if (ValidInput(j - 1) && EastQuestion[i, j - 1] != null)
+                        {
+
+                            WestQuestion[i, j] = EastQuestion[i, j - 1];
+
+                        }
+                        else
+                        {
+                            WestQuestion[i, j] = questions.Dequeue();
+                        }
+
+                    }
 
                 }
-                
+
             }
 
+        }
+
+        private bool ValidInput(int index)
+        {
+            return index >= 0 && index < size;
         }
 
         public static void Print2DArray<T>(T[,] matrix)
