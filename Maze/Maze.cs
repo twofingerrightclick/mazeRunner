@@ -7,7 +7,7 @@ namespace Maze
     public class Maze
     {
 
-        private Room[,] roomArray;
+       
         private int size;
         private int[] entranceCoodinates = new int[2];
         private int[] exitCoordinates = new int[2];
@@ -20,7 +20,7 @@ namespace Maze
 
         public Maze(int size, params string [] questionArgs)
         {
-            this.roomArray = new Room[size,size];
+       
             this.size = size;
             
             questions = questionFactory.getQuestions(questionArgs, (size * size * 4));
@@ -37,40 +37,18 @@ namespace Maze
             MazeStructure mazeStructure = new MazeStructure(size);
             String[,] wallLocations = mazeStructure.getWalls();
 
-            for (int x = 0; x < size; x++)
-            {
-
-                for (int y = 0; y < size; y++)
-                {
-                    this.roomArray[x,y] = new Room(wallLocations[x,y]);
-                }
-            }
-
-            //bool sucess = 
-                populateWithEvents();
-
-           // return sucess;
         }
 
-        private void populateWithEvents()
-        {
-
-            setExits();
-            addQuestions();
-            //return addEvents();
-
-
-
-        }
+        
 
         private void changeRoomQuestions( (int x, int y) roomCoordinates, params string [] questionArgs )
         {
             
             
 
-           int numQuestionsNotAnsweredInRoom = roomArray[roomCoordinates.x, roomCoordinates.y].getRemainingQuestions();
+         //  int numQuestionsNotAnsweredInRoom = roomArray[roomCoordinates.x, roomCoordinates.y].getRemainingQuestions();
             
-            questionFactory.getQuestions(questionArgs, numQuestionsNotAnsweredInRoom);
+           // questionFactory.getQuestions(questionArgs, numQuestionsNotAnsweredInRoom);
 
             //the room has questions stored by index. so then add the new questions at the old questions spots, and check adjacent questions. 
 
@@ -81,32 +59,10 @@ namespace Maze
 
         public void QuestionAnsweredCorrectly((int x, int y) roomIndex, int questionIndex)
         {
-            roomArray[roomIndex.x, roomIndex.y].RemoveQuestionMakeDoorOpen(questionIndex);
+            //roomArray[roomIndex.x, roomIndex.y].RemoveQuestionMakeDoorOpen(questionIndex);
         }
 
-        private bool addQuestions()
-        {
-
-            foreach (Room room in roomArray)
-            {
-                //get doors
-                //assign question by index to the question array.
-            }
-
-            //for (Room row[] : roomArray)
-            //{
-
-            //    for (Room room : row)
-            //    {
-            //        //only add events where there aren't exits
-
-            //    }
-
-            //}
-
-
-            return true;
-        }
+       
 
         private void setExits()
         {
@@ -146,83 +102,7 @@ namespace Maze
             return this.exitCoordinates;
         }
 
-        public void MakeMock()
-        {
-            for (int dungeonRow = 0; dungeonRow < this.size; dungeonRow++)
-            {
-                for (int dungeonCol = 0; dungeonCol < this.size; dungeonCol++)
-                {
-                    roomArray[dungeonRow,dungeonCol] = new Room();
-                }
-            }
 
-        }
-
-      override
-    public String ToString()
-        {
-            StringBuilder mazeRoomStringBuilder = new StringBuilder();
-            for (int mazeRow = 0; mazeRow < this.size; mazeRow++)
-            {
-
-                for (int roomRow = 0; roomRow < 3; roomRow++)
-                {
-                    for (int mazeCol = 0; mazeCol < this.size; mazeCol++)
-                    {
-                        mazeRoomStringBuilder.Append(getRoom(mazeRow, mazeCol).getRoomRowasString(roomRow));
-                        //mazeRoomStringBuilder.Append(getRoom(mazeRow, dungeonCol));
-
-                    }
-                    mazeRoomStringBuilder.Append("\r\n");
-                }
-
-            }
-
-            return mazeRoomStringBuilder.ToString();
-
-
-        }
-
-
-        //public void printCurrentLocation(PillarofOOHeroTracker heroTracker)
-        //{
-        //    Room currentRoom = this.getRoom(heroTracker.getLocation());
-        //    char currentIdentifier = currentRoom.getRoomIdentier();
-        //    currentRoom.setRoomEventIdentifier('+');
-
-        //    StringBuilder dungeonStringBuilder = new StringBuilder();
-        //    for (int dungeonRow = 0; dungeonRow < this.size; dungeonRow++)
-        //    {
-
-        //        for (int row = 0; row < 3; row++)
-        //        {
-        //            for (int dungeonCol = 0; dungeonCol < this.size; dungeonCol++)
-        //            {
-        //                dungeonStringBuilder.append(getRoom(dungeonRow, dungeonCol).getRoomRowasString(row));
-
-        //            }
-        //            dungeonStringBuilder.append("\r\n");
-        //        }
-
-        //    }
-
-        //    System.out.println(dungeonStringBuilder.toString());
-        //    System.out.println("+ = current location");
-        //    currentRoom.setRoomEventIdentifier(currentIdentifier);
-
-
-
-        //}
-
-
-        public Room getRoom(int x, int y)
-        {
-            return this.roomArray[x,y];
-        }
-        public Room getRoom(int[] xy)
-        {
-            return this.roomArray[xy[0],xy[1]];
-        }
 
 
         public int getSize()
