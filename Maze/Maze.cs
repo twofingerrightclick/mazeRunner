@@ -1,116 +1,242 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Maze
 {
     public class Maze
     {
 
-       
-        private int size;
-        private int[] entranceCoodinates = new int[2];
-        private int[] exitCoordinates = new int[2];
-        private QuestionFactory questionFactory = new QuestionFactory();
-        private Queue<Question> questions;
+
+        public int Size { get; private set; }
+        public bool[,] NorthWall { get; private set; }    // is there a wall to north of cell i, j
+        public bool[,] EastWall { get; private set; }
+        public bool[,] SouthWall { get; private set; }
+        public bool[,] WestWall { get; private set; }
+
+        public Question[,] NorthQuestion { get; private set; }    // is there a Question north of cell i, j 
+        public Question[,] EastQuestion { get; private set; }
+        public Question[,] SouthQuestion { get; private set; }
+        public Question[,] WestQuestion { get; private set; }
+
+
+        public bool[,] RoomDiscovered { get; private set; }
+
+
+
+        private (int x, int y) _EntranceCoodinates;
+        private (int x, int y) _ExitCoordinates;
+
+        private QuestionFactory _QuestionFactory = new QuestionFactory();
+
 
 
 
         private Random randomInt = new Random();
 
-        public Maze(int size, params string [] questionArgs)
+        public Maze(int size, params string[] questionArgs)
         {
-       
-            this.size = size;
-            
-            questions = questionFactory.getQuestions(questionArgs, (size * size * 4));
+            if (size < 3)
+            {
+                throw new ArgumentException("size must be more than 2", nameof(size));
+            }
 
-            createMaze();
+            this.Size = size;
+
+            createMaze(questionArgs);
+
+        }
+
+        private void createMaze(params string[] questionArgs)
+        {
+
+            MazeStructure mazeStructure = new MazeStructure(Size, questionArgs);
+
+            CopyMazeStructure(mazeStructure);
+
+            mazeStructure = null; // clean up memory.
+
+            setExits();
 
 
 
         }
 
-        private void createMaze()
+        private void CopyMazeStructure(MazeStructure mazeStructure)
         {
+            NorthQuestion = mazeStructure.NorthQuestion;
+            EastQuestion = mazeStructure.EastQuestion;
+            SouthQuestion = mazeStructure.SouthQuestion;
+            WestQuestion = mazeStructure.WestQuestion;
 
-            MazeStructure mazeStructure = new MazeStructure(size);
-            String[,] wallLocations = mazeStructure.getWalls();
-
-        }
-
-        
-
-        private void changeRoomQuestions( (int x, int y) roomCoordinates, params string [] questionArgs )
-        {
-            
-            
-
-         //  int numQuestionsNotAnsweredInRoom = roomArray[roomCoordinates.x, roomCoordinates.y].getRemainingQuestions();
-            
-           // questionFactory.getQuestions(questionArgs, numQuestionsNotAnsweredInRoom);
-
-            //the room has questions stored by index. so then add the new questions at the old questions spots, and check adjacent questions. 
+            NorthWall = mazeStructure.NorthWall;
+            EastWall = mazeStructure.EastWall;
+            SouthWall = mazeStructure.SouthWall;
+            WestWall = mazeStructure.WestWall;
 
 
 
         }
 
-
-        public void QuestionAnsweredCorrectly((int x, int y) roomIndex, int questionIndex)
+        private void ChangeQuestion(Question question, params string[] questionArgs)
         {
-            //roomArray[roomIndex.x, roomIndex.y].RemoveQuestionMakeDoorOpen(questionIndex);
+            question = _QuestionFactory.getQuestions(questionArgs, 1).Dequeue();
         }
 
-       
+
+
+        public void ChangeAllQuestions((int x, int y) location, params string[] questionParams)
+        {
+            Queue<Question> newQuestions = _QuestionFactory.getQuestions(questionParams, Size * Size * 4);
+
+            NorthQuestion = new Question[Size, Size];
+            EastQuestion = new Question[Size, Size];
+            SouthQuestion = new Question[Size, Size];
+            WestQuestion = new Question[Size, Size];
+
+
+
+            if (!NorthWall[location.x, location.y])
+
+            {
+
+                if (ValidIndex(location.x - 1) && SouthQuestion[location.x - 1, location.y] != null)
+                {
+
+                    NorthQuestion[location.x, location.y] = SouthQuestion[location.x - 1, location.y];
+
+                }
+                else
+                {
+                    NorthQuestion[location.x, location.y] = newQuestions.Dequeue();
+                }
+
+            }
+
+            if (!SouthWall[location.x, location.y])
+
+            {
+
+                if (ValidIndex(location.x + 1) && NorthQuestion[location.x + 1, location.y] != null)
+                {
+
+                    SouthQuestion[location.x, location.y] = NorthQuestion[location.x + 1, location.y];
+
+                }
+                else
+                {
+                    SouthQuestion[location.x, location.y] = newQuestions.Dequeue();
+                }
+
+            }
+
+            if (!EastWall[location.x, location.y])
+
+            {
+
+                if (ValidIndex(location.y + 1) && WestQuestion[location.x, location.y + 1] != null)
+                {
+
+                    EastQuestion[location.x, location.y] = WestQuestion[location.x, location.y + 1];
+
+                }
+                else
+                {
+                    EastQuestion[location.x, location.y] = newQuestions.Dequeue();
+                }
+
+            }
+
+            if (WestWall[location.x, location.y])
+
+            {
+
+                if (ValidIndex(location.y - 1) && EastQuestion[location.x, location.y - 1] != null)
+                {
+
+                    WestQuestion[location.x, location.y] = EastQuestion[location.x, location.y - 1];
+
+                }
+                else
+                {
+                    WestQuestion[location.x, location.y] = newQuestions.Dequeue();
+                }
+
+            }
+        }
+
+        public void QuestionAnsweredCorrectly(Question question)
+        {
+            question.Unlock();
+        }
+
+
 
         private void setExits()
         {
-            entranceCoodinates[0] = randomInt.Next(size / 2);
-            entranceCoodinates[1] = randomInt.Next(size / 2);
+            _EntranceCoodinates.x = randomInt.Next(Size / 2);
+            _EntranceCoodinates.y = randomInt.Next(Size / 2);
 
             int boundaryFactor;
-            if (size % 2 == 0)
+            if (Size % 2 == 0)
             {
-                boundaryFactor = (size / 2) - 1;
+                boundaryFactor = (Size / 2) - 1;
             }
-            else boundaryFactor = size / 2;
+            else boundaryFactor = Size / 2;
             int exitX;
-            int exitY = randomInt.Next(size / 2) + boundaryFactor;
+            int exitY = randomInt.Next(Size / 2) + boundaryFactor;
             do
             {
-                exitX = randomInt.Next(size / 2) + boundaryFactor;
+                exitX = randomInt.Next(Size / 2) + boundaryFactor;
             }
-            while (exitX == entranceCoodinates[0]);
+            while (exitX == _EntranceCoodinates.x);
 
-            exitCoordinates[0] = exitX;
-            exitCoordinates[1] = exitY;
-
-            
-            //RoomEvent theEntrance = new Entrance();
-            //roomArray[exitX,exitY].addRoomEvent(theExit);
-            //roomArray[entranceCoodinates[0],entranceCoodinates[1]].addRoomEvent(theEntrance);
+            _ExitCoordinates.x = exitX;
+            _ExitCoordinates.y = exitY;
 
         }
 
-        public int[] getEntrance()
+        public (int x, int y) getEntrance()
         {
-            return this.entranceCoodinates;
+            return _EntranceCoodinates;
         }
-        public int[] getExit()
+        public (int x, int y) getExit()
         {
-            return this.exitCoordinates;
+            return _ExitCoordinates;
         }
-
-
 
 
         public int getSize()
         {
-            return size;
+            return Size;
         }
 
-        
+
+
+        private void ChangeAllQuestionAtLocation((int x, int y) location)
+        {
+
+            if (NorthQuestion[location.x, location.y] != null && NorthQuestion[location.x, location.y].Locked()) { ChangeQuestion(NorthQuestion[location.x, location.y]); }
+
+            if (SouthQuestion[location.x, location.y] != null && SouthQuestion[location.x, location.y].Locked()) { ChangeQuestion(SouthQuestion[location.x, location.y]); }
+
+            if (WestQuestion[location.x, location.y] != null && WestQuestion[location.x, location.y].Locked()) { ChangeQuestion(WestQuestion[location.x, location.y]); }
+
+            if (EastQuestion[location.x, location.y] != null && EastQuestion[location.x, location.y].Locked()) { ChangeQuestion(EastQuestion[location.x, location.y]); }
+
+        }
+
+        public bool ValidIndex(int index)
+        {
+            return index >= 0 && index < Size;
+        }
+
+
+
+
+
+
+
+
     }
 
 }
