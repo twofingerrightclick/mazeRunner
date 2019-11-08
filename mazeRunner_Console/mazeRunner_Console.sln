@@ -5,9 +5,9 @@ VisualStudioVersion = 16.0.29324.140
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "mazeRunner_Console", "mazeRunner_Console.csproj", "{F2BAA295-DB8E-4C76-AFFE-93747101DB94}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Maze", "..\Maze\Maze.csproj", "{4A10CA1D-7589-4AAD-BC75-6E1C9C4FD2F6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MazeComponents", "..\Maze\MazeComponents.csproj", "{4A10CA1D-7589-4AAD-BC75-6E1C9C4FD2F6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MazeTests", "..\MazeTests\MazeTests.csproj", "{600670B0-A7D7-488A-B4A2-0B8C5628F7B9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MazeTests", "..\MazeTests\MazeTests.csproj", "{600670B0-A7D7-488A-B4A2-0B8C5628F7B9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

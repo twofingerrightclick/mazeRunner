@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Maze
+namespace MazeComponents
 {
     internal class QuestionFactory
     {
