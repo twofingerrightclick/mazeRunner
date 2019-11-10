@@ -7,7 +7,32 @@ namespace MazeComponents
         public int number;
         private bool _Locked;
 
-        public Question() { }
+        public string Difficulty { get; }
+        public string Category { get; }
+        public string Type { get; }
+        public string QuestionPrompt { get; }
+        public string CorrectAnswer { get; }
+        public string [] IncorrectAnswers { get; }
+
+        public Question(string difficulty, string category, string type, string questionPrompt, string correctAnswer, string IncorrectAnswers) {
+            Difficulty = difficulty;
+            Category = Category;
+            Type = type;
+            QuestionPrompt = questionPrompt;
+            CorrectAnswer = correctAnswer;
+            this.IncorrectAnswers = ParseWrongAnswers(this.IncorrectAnswers);
+            _Locked = true;
+
+          
+        }
+
+        private string[] ParseWrongAnswers(string[] wrongAnswers)
+        {
+            string [] incorrectAnswers = new string[0];
+
+            return incorrectAnswers;
+
+        }
 
         public Question(int num) {
             number = num;
