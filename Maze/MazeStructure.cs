@@ -326,14 +326,7 @@ namespace MazeComponents
 
 
         // a test client
-        public static void Main(string[] args)
-        {
-            int n = 3;
-            MazeStructure maze = new MazeStructure(n);
-            maze.testDraw();
-
-
-        }
+     
 
         private string[,] ConvertAlgorithmMazeToRowColFormat(string[,] wallLocations)
         {
