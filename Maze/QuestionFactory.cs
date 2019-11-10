@@ -34,7 +34,7 @@ namespace MazeComponents
 
             
 
-            if (questionArgs != null)
+            if (questionArgs.Length>0)
             {
                 string args = questionArgs.ToString();
                 if (args.Contains("e"))
