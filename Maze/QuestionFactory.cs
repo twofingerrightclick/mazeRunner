@@ -7,9 +7,9 @@ namespace MazeComponents
 {
     public class QuestionFactory
     {
-        private int _EasyQuestionRowId = 0;
-        private int _MediumQuestionRowId = 0;
-        private int _HardQuestionRowId = 0; // keeps track of what questiosn have been already used from database.
+        private int _EasyQuestionRowId = 1;
+        private int _MediumQuestionRowId = 1;
+        private int _HardQuestionRowId = 1; // keeps track of what questiosn have been already used from database.
 
         //string _Database = $"Data Source={Environment.CurrentDirectory}\\QuestionsForMazeRunner.db; Version=3;";
         string _Database = @"Data Source=C:\Users\saffron\source\repos\mazeRunner\mazeRunner_Console\QuestionsForMazeRunner.db; Version=3;";
@@ -29,10 +29,11 @@ namespace MazeComponents
             sql_conn.Open();
             var questions = new Queue<Question>();
 
-            int newRowID=0;
+            int newRowID=1;
 
             using (SQLiteCommand cmd = sql_conn.CreateCommand())
             {
+                SQLiteDataReader reader;
                 for (int i = _EasyQuestionRowId; i < _EasyQuestionRowId + numberOfQuestionsToReturn; i++)
                 {
 
@@ -40,11 +41,11 @@ namespace MazeComponents
 
 
 
-                    cmd.CommandText = @"select Category from EasyQuestions where ID=" + i + 1;
+                    cmd.CommandText = @"select * from EasyQuestions where ID=" + i;
                     //cmd.Parameters.Add(new SQLiteParameter("@userId") { Value = userId });
                     cmd.CommandType = System.Data.CommandType.Text;
 
-                    SQLiteDataReader reader;
+                   
                     reader = cmd.ExecuteReader();
 
 
@@ -52,19 +53,28 @@ namespace MazeComponents
 
                     if (reader.Read())
                     {
-                        Console.WriteLine("-------");
-                        //Console.WriteLine(reader["ID"].ToString());
-                        Console.WriteLine(reader["Category"].ToString());
-                        //Console.WriteLine(reader["Type"].ToString());
-                        //Console.WriteLine(reader["Question"].ToString());
-                        //Console.WriteLine(reader["CorrectAnswer"].ToString());
+                        
+                      
+                        int ID = Convert.ToInt32(reader["ID"]);
+                        string type= (reader["Type"].ToString());
+                        string category = (reader["Category"].ToString());
+                        string difficulty = (reader["Difficulty"].ToString());
+                        string question = (System.Web.HttpUtility.HtmlDecode(reader["Question"].ToString()));
+                        
+                        string correctAnswer= (reader["CorrectAnswer"].ToString());
+
+                        string[] incorrectAnswers = reader["IncorrectAnswers"].ToString().Split("|");
+
+
+                        questions.Enqueue(new Question(difficulty, category, type, question, correctAnswer, incorrectAnswers));
 
                     }
+                    //Console.WriteLine(reader);
                     reader.Close();
                     newRowID = i;
                 }
 
-                _EasyQuestionRowId = newRowID;
+                _EasyQuestionRowId = newRowID+1;
 
                 //sql_cmd.ExecuteNonQuery();
 

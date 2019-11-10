@@ -14,25 +14,19 @@ namespace MazeComponents
         public string CorrectAnswer { get; }
         public string [] IncorrectAnswers { get; }
 
-        public Question(string difficulty, string category, string type, string questionPrompt, string correctAnswer, string IncorrectAnswers) {
+        public Question(string difficulty, string category, string type, string questionPrompt, string correctAnswer, string [] incorrectAnswers) {
             Difficulty = difficulty;
             Category = Category;
             Type = type;
             QuestionPrompt = questionPrompt;
             CorrectAnswer = correctAnswer;
-            this.IncorrectAnswers = ParseWrongAnswers(this.IncorrectAnswers);
+            IncorrectAnswers = incorrectAnswers;
             _Locked = true;
 
           
         }
 
-        private string[] ParseWrongAnswers(string[] wrongAnswers)
-        {
-            string [] incorrectAnswers = new string[0];
-
-            return incorrectAnswers;
-
-        }
+        
 
         public Question(int num) {
             number = num;
