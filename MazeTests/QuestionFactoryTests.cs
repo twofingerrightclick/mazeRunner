@@ -9,8 +9,6 @@ namespace MazeTests
     public class QuestionFactoryTests
     {
 
-
-
         [TestMethod]
         public void Question_Factory_DB_Test()
         {
@@ -19,8 +17,6 @@ namespace MazeTests
             string [] fakeArgs = null;
 
             q.getQuestions(fakeArgs, 20);
-
-          
 
         }
 
