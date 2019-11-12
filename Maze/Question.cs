@@ -4,7 +4,7 @@ namespace MazeComponents
 {
     public class Question
     {
-        public int number;
+        
         private bool _Locked;
 
         public string Difficulty { get; }
@@ -15,6 +15,7 @@ namespace MazeComponents
         public string [] IncorrectAnswers { get; }
 
         public Question(string difficulty, string category, string type, string questionPrompt, string correctAnswer, string [] incorrectAnswers) {
+            
             Difficulty = difficulty;
             Category = Category;
             Type = type;
@@ -23,16 +24,11 @@ namespace MazeComponents
             IncorrectAnswers = incorrectAnswers;
             _Locked = true;
 
-          
         }
 
         
 
-        public Question(int num) {
-            number = num;
-            _Locked = true;
-
-        }
+      
 
         internal bool Locked()
         {

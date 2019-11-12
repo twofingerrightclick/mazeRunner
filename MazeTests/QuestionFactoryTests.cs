@@ -2,6 +2,7 @@
 using MazeComponents;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using System.Collections.Generic;
 
 namespace MazeTests
 {
@@ -16,7 +17,8 @@ namespace MazeTests
             QuestionFactory q = new QuestionFactory();
             string [] fakeArgs = null;
 
-            q.getQuestions(fakeArgs, 20);
+            Queue<Question> list= q.getQuestions(fakeArgs, 1);
+            list.Dequeue();
 
         }
 
