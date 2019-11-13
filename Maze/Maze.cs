@@ -30,7 +30,7 @@ namespace MazeComponents
 
         public List<Question> MazeQuestions { get; private set; } = new List<Question>();
 
-
+        static void Main(string [] args) { }
 
 
         private Random randomInt = new Random();

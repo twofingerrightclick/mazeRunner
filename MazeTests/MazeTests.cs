@@ -41,7 +41,7 @@ namespace MazeTests
                     {
                         if (!maze.NorthWall[i, j])
                         {
-                            Console.WriteLine($"({i},{j}) north question {maze.GetQuestion(maze.NorthQuestion[i, j]).number} matches south question {maze.MazeQuestions[maze.SouthQuestion[i - 1, j]].number} of ({i - 1},{j})");
+                            Console.WriteLine($"({i},{j}) north question {maze.GetQuestion(maze.NorthQuestion[i, j]).CorrectAnswer} matches south question {maze.MazeQuestions[maze.SouthQuestion[i - 1, j]].CorrectAnswer} of ({i - 1},{j})");
                             Assert.IsTrue(ReferenceEquals(maze.GetQuestion(maze.NorthQuestion[i, j]), maze.GetQuestion(maze.SouthQuestion[i - 1, j]) ));
 
                         }
@@ -71,7 +71,7 @@ namespace MazeTests
                         {
                             maze.ChangeQuestion(maze.NorthQuestion[i, j]);
 
-                            Console.WriteLine($"({i},{j}) north question -{maze.MazeQuestions[maze.NorthQuestion[i, j]].number}- matches south question {maze.MazeQuestions[maze.SouthQuestion[i - 1, j]].number} of ({i - 1},{j})");
+                            Console.WriteLine($"({i},{j}) north question -{maze.MazeQuestions[maze.NorthQuestion[i, j]].CorrectAnswer}- matches south question {maze.MazeQuestions[maze.SouthQuestion[i - 1, j]].CorrectAnswer} of ({i - 1},{j})");
                             Assert.IsTrue(ReferenceEquals(maze.GetQuestion(maze.NorthQuestion[i, j]), maze.GetQuestion(maze.SouthQuestion[i - 1, j])));
 
                         }
@@ -105,7 +105,7 @@ namespace MazeTests
                     {
                         if (!maze.NorthWall[i, j])
                         {
-                            Console.WriteLine($"({i},{j}) north question {maze.GetQuestion(maze.NorthQuestion[i, j]).number} matches south question {maze.MazeQuestions[maze.SouthQuestion[i - 1, j]].number} of ({i - 1},{j})");
+                            Console.WriteLine($"({i},{j}) north question {maze.GetQuestion(maze.NorthQuestion[i, j]).CorrectAnswer} matches south question {maze.MazeQuestions[maze.SouthQuestion[i - 1, j]].CorrectAnswer} of ({i - 1},{j})");
                             Assert.IsTrue(ReferenceEquals(maze.GetQuestion(maze.NorthQuestion[i, j]), maze.GetQuestion(maze.SouthQuestion[i - 1, j])));
 
                         }
