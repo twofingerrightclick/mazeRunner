@@ -5,17 +5,23 @@ using System.Data.SQLite;
 
 namespace MazeComponents
 {
+   
     public class QuestionFactory
     {
-        private int[] _IndexCounters = new int[] { 1, 1, 1 };
+        private int[] _EasyMode = new int[] { 70, 90, 100 };
+        private int[] _MediumMode = new int[] { 40, 85, 100 };
+        private int[] _HardMode = new int[] { 20, 70, 100 };
+        private int[] _LegendaryMode = new int[] { 0, 10, 100 };
+
+        private int[] _IndexCounters = new int[] { 1, 1, 1 }; // keeps track of what questions have been already used from database.
         string[] _Tables = new string[] { "EasyQuestions", "MediumQuestions", "HardQuestions" };
         private enum _EnumTable
         {
-            EasyQuestion = 0,
+            EasyQuestions = 0,
             MediumQuestions = 1,
             HardQuestions = 2
         }
-        // keeps track of what questiosn have been already used from database.
+        
 
         //string _Database = $"Data Source={Environment.CurrentDirectory}\\QuestionsForMazeRunner.db; Version=3;";
         string _Database = @"Data Source=C:\Users\saffron\source\repos\mazeRunner\mazeRunner_Console\QuestionsForMazeRunner.db; Version=3;";
@@ -26,20 +32,21 @@ namespace MazeComponents
         public Queue<Question> getQuestions(string[] questionArgs, int numberOfQuestionsToReturn)
         {
 
-            bool getRandomQuestions = false;
+            bool getRandomQuestionsBasedOnLevel = false;
 
 
 
             int currentTableToGetFrom = 0;
 
+            //default level
+            int[] currentLevel = _EasyMode;
 
-
-            if (questionArgs!= null && questionArgs.Length > 0)
+            if (questionArgs != null && questionArgs.Length > 0)
             {
-                string args = questionArgs.ToString();
+                string args = string.Join("", questionArgs); 
                 if (args.Contains("e"))
                 {
-                    currentTableToGetFrom = (int)_EnumTable.EasyQuestion;
+                    currentTableToGetFrom = (int)_EnumTable.EasyQuestions;
 
 
                 }
@@ -48,9 +55,27 @@ namespace MazeComponents
                     currentTableToGetFrom = (int)_EnumTable.MediumQuestions;
 
                 }
+                if (args.Contains("0"))
+                {
+                    currentLevel = _EasyMode;
+                    getRandomQuestionsBasedOnLevel = true;
+
+                }
+                if (args.Contains("1"))
+                {
+                    currentLevel = _MediumMode;
+                    getRandomQuestionsBasedOnLevel = true;
+
+                }
+                if (args.Contains("2"))
+                {
+                    currentLevel = _MediumMode;
+                    getRandomQuestionsBasedOnLevel = true;
+
+                }
             }
 
-            else { getRandomQuestions = true; }
+           
 
 
 
@@ -66,9 +91,7 @@ namespace MazeComponents
             sql_conn.Open();
             var questions = new Queue<Question>();
 
-            double percentHard = .1;
-            double percentEasy = .7;
-            double percentMedium = .2;
+           
 
             using (SQLiteCommand cmd = sql_conn.CreateCommand())
             {
@@ -76,25 +99,26 @@ namespace MazeComponents
                 for (int i = 0; i < numberOfQuestionsToReturn; i++)
                 {
 
-
+                   
                     // gets questions based on percentage of difficulty
-                    if (getRandomQuestions == true)
+                    if (getRandomQuestionsBasedOnLevel == true)
                     {
                         int random = randomInt.Next(100) + 1;
-                        if (random / 100 <= percentHard)
-                        {
-                            currentTableToGetFrom = 2;
-                        }
-                        if (random / 100 <= percentMedium)
-                        {
-                            currentTableToGetFrom = 1;
-                        }
-                        if (random / 100 <= percentEasy)
+                      
+                        if (random>0 &&random <= currentLevel[0])
                         {
                             currentTableToGetFrom = 0;
                         }
+                        if (random > currentLevel[0] && random <= currentLevel[1])
+                        {
+                            currentTableToGetFrom = 1;
+                        }
+                        if (random > currentLevel[(int)_EnumTable.MediumQuestions] && random <= currentLevel[(int)_EnumTable.HardQuestions])
+                        {
+                            currentTableToGetFrom = 2;
+                        }
 
-                       // Console.WriteLine(currentTableToGetFrom);
+                       
 
                     }
 
@@ -114,7 +138,7 @@ namespace MazeComponents
                         string question = (System.Web.HttpUtility.HtmlDecode(reader["Question"].ToString()));
                         string correctAnswer = (reader["CorrectAnswer"].ToString());
                         string[] incorrectAnswers = reader["IncorrectAnswers"].ToString().Split("|");
-                       // Console.WriteLine(difficulty);
+                        Console.WriteLine(difficulty);
                         //Console.WriteLine(correctAnswer);
                         questions.Enqueue(new Question(difficulty, category, type, question, correctAnswer, incorrectAnswers));
 

@@ -15,9 +15,9 @@ namespace MazeTests
         {
 
             QuestionFactory q = new QuestionFactory();
-            string [] fakeArgs = null;
+            string [] fakeArgs = new string [] {"0"};
 
-            Queue<Question> list= q.getQuestions(fakeArgs, 1);
+            Queue<Question> list= q.getQuestions(fakeArgs, 10);
             list.Dequeue();
 
         }
